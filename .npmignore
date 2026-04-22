@@ -1,0 +1,15 @@
+src
+examples
+node_modules
+tsconfig.json
+tsup.config.ts
+.gitignore
+.github
+.vscode
+.idea
+.editorconfig
+AGENTS.md
+CONTRIBUTING.md
+*.log
+.DS_Store
+coverage
