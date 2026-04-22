@@ -1,11 +1,11 @@
-# panes
+# panes-ui
 
 > Tiny, dependency-free **movable & resizable in-app modal panes** for the web — written in TypeScript, unified mouse/touch/pen input via Pointer Events.
 
-[![npm](https://img.shields.io/npm/v/panes.svg)](https://www.npmjs.com/package/panes)
-[![types](https://img.shields.io/npm/types/panes.svg)](https://www.npmjs.com/package/panes)
+[![npm](https://img.shields.io/npm/v/panes-ui.svg)](https://www.npmjs.com/package/panes-ui)
+[![types](https://img.shields.io/npm/types/panes-ui.svg)](https://www.npmjs.com/package/panes-ui)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![bundle size](https://img.shields.io/bundlephobia/minzip/panes)](https://bundlephobia.com/package/panes)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/panes-ui)](https://bundlephobia.com/package/panes-ui)
 
 - ~5 KB min+gzip, **zero dependencies**
 - Works with **mouse, touch, and pen** via [Pointer Events](https://developer.mozilla.org/docs/Web/API/Pointer_events)
@@ -35,9 +35,11 @@
 
 ---
 
+> The package is named **`panes-ui`** on npm (the bare name `panes` was taken). The JavaScript global exposed by the CDN/IIFE build is still `Panes`.
+
 ## Prerequisites
 
-Panes is a **browser-only** library.
+`panes-ui` is a **browser-only** library.
 
 | Requirement  | Minimum                                                             |
 | ------------ | ------------------------------------------------------------------- |
@@ -52,20 +54,20 @@ There is **no SSR runtime** — construct panes from browser code (`useEffect`, 
 ## Install
 
 ```bash
-npm install panes
+npm install panes-ui
 # or
-pnpm add panes
+pnpm add panes-ui
 # or
-yarn add panes
+yarn add panes-ui
 ```
 
 This installs both the JavaScript and the types. Also import the stylesheet once:
 
 ```ts
-import "panes/style.css";
+import "panes-ui/style.css";
 ```
 
-If your bundler doesn't handle CSS imports, copy `node_modules/panes/dist/pane.css` into your static assets and link it with a `<link rel="stylesheet">`.
+If your bundler doesn't handle CSS imports, copy `node_modules/panes-ui/dist/pane.css` into your static assets and link it with a `<link rel="stylesheet">`.
 
 ---
 
@@ -86,8 +88,8 @@ If your bundler doesn't handle CSS imports, copy `node_modules/panes/dist/pane.c
 ### 2. Import and open
 
 ```ts
-import { Pane } from "panes";
-import "panes/style.css";
+import { Pane } from "panes-ui";
+import "panes-ui/style.css";
 
 const pane = new Pane("#my-pane", { title: "Hello" });
 pane.open();
@@ -96,7 +98,7 @@ pane.open();
 Or use the one-line shortcut:
 
 ```ts
-import { open } from "panes";
+import { open } from "panes-ui";
 open("#my-pane", { title: "Hello" }); // lazy-creates + opens
 ```
 
@@ -105,14 +107,14 @@ open("#my-pane", { title: "Hello" }); // lazy-creates + opens
 ## CDN (no build step)
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/panes/dist/pane.css" />
-<script src="https://unpkg.com/panes"></script>
+<link rel="stylesheet" href="https://unpkg.com/panes-ui/dist/pane.css" />
+<script src="https://unpkg.com/panes-ui"></script>
 <script>
   Panes.open("#my-pane", { title: "Hello" });
 </script>
 ```
 
-Pin a version for production: `https://unpkg.com/panes@1.1.0/...`.
+Pin a version for production: `https://unpkg.com/panes-ui@1.1.0/...`.
 
 ---
 
@@ -122,8 +124,8 @@ Pin a version for production: `https://unpkg.com/panes@1.1.0/...`.
 
 ```tsx
 import { useEffect, useRef } from "react";
-import { Pane } from "panes";
-import "panes/style.css";
+import { Pane } from "panes-ui";
+import "panes-ui/style.css";
 
 export function MyModal({ open }: { open: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -155,8 +157,8 @@ export function MyModal({ open }: { open: boolean }) {
 ```vue
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, ref } from "vue";
-import { Pane } from "panes";
-import "panes/style.css";
+import { Pane } from "panes-ui";
+import "panes-ui/style.css";
 
 const root = ref<HTMLDivElement>();
 let pane: Pane | null = null;
@@ -263,7 +265,7 @@ interface PaneOptions {
 A singleton `manager` assigns z-index. Calling `focus()` (or any pointerdown on a pane) raises it to the top. For isolated stacking, construct your own:
 
 ```ts
-import { Pane, PaneManager } from "panes";
+import { Pane, PaneManager } from "panes-ui";
 const myManager = new PaneManager();
 const p = new Pane("#a", {}, myManager);
 ```
@@ -274,7 +276,7 @@ z-index values are automatically rebased when they grow large, so long sessions 
 
 ## Styling
 
-Import `panes/style.css` for the default look, or write your own — the library only reads geometry, never your colors.
+Import `panes-ui/style.css` for the default look, or write your own — the library only reads geometry, never your colors.
 
 Interactive state is exposed as classes on the root element:
 
@@ -288,7 +290,7 @@ Interactive state is exposed as classes on the root element:
 
 ## Accessibility
 
-Panes sets the following on the root on construction (unless you've set them yourself):
+`panes-ui` sets the following on the root on construction (unless you've set them yourself):
 
 - `role="dialog"`
 - `aria-modal="false"` — panes are *non-blocking* in-app windows, not modal dialogs. If you want a true modal, implement a backdrop + focus trap above it.
@@ -319,7 +321,7 @@ npm run typecheck
 
 ## Security
 
-- Panes never executes user-supplied strings, never evaluates event-handler strings, and never injects HTML. `options.title` is set via `textContent` / `appendChild`, not `innerHTML`.
+- `panes-ui` never executes user-supplied strings, never evaluates event-handler strings, and never injects HTML. `options.title` is set via `textContent` / `appendChild`, not `innerHTML`.
 - If you embed user-generated content inside `.pane-content`, **you** are responsible for sanitizing it.
 - The library does not make any network requests.
 

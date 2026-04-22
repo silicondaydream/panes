@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for your interest in `panes`! Bug reports, patches, and docs are all welcome.
+Thanks for your interest in `panes-ui`! Bug reports, patches, and docs are all welcome.
 
 ## Development setup
 

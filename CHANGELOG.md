@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.1.0] — 2026-04-22
 
+### Changed
+- **Package renamed to `panes-ui`** on npm (the bare `panes` name was unavailable). The IIFE global export is still `Panes`. Imports change from `"panes"` → `"panes-ui"` and `"panes/style.css"` → `"panes-ui/style.css"`.
+
 ### Added
 - ARIA defaults: `role="dialog"`, `aria-modal="false"`, `aria-labelledby`, and `tabindex="-1"` are set on the pane root when the consumer hasn't set them.
 - Cursor resets when the pointer leaves the pane (no more stuck resize cursors).

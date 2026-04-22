@@ -4,7 +4,7 @@ Guidance for AI coding agents (and humans) working in this repository.
 
 ## Project summary
 
-`panes` is a zero-dependency TypeScript library that turns any `<div>` into a movable, resizable, in-app pane. It uses Pointer Events for unified mouse/touch/pen input, ships ESM + CJS + IIFE builds, and has no runtime dependencies.
+`panes-ui` (published on npm as `panes-ui`) is a zero-dependency TypeScript library that turns any `<div>` into a movable, resizable, in-app pane. It uses Pointer Events for unified mouse/touch/pen input, ships ESM + CJS + IIFE builds, and has no runtime dependencies.
 
 ## Repo layout
 
