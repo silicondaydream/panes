@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>panes-ui — tiny, dependency-free movable & resizable in-app panes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="panes-ui is a tiny (~5 KB), zero-dependency TypeScript library that turns any div into a movable, resizable in-app pane. Works with mouse, touch, and pen. ESM + CJS + IIFE. React / Vue / Svelte friendly." />
+    <meta name="keywords" content="panes, panes-ui, modal, dialog, draggable, resizable, movable, floating window, window manager, touch, pointer events, typescript, react, vue, svelte, zero dependencies, lightweight, accessibility, dialog" />
+    <meta name="author" content="Chris Adams" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="theme-color" content="#00091d" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="canonical" href="https://silicondaydream.github.io/panes/" />
+    <link rel="alternate" type="application/json" title="npm package" href="https://registry.npmjs.org/panes-ui" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="panes-ui" />
+    <meta property="og:title" content="panes-ui — movable & resizable in-app panes" />
+    <meta property="og:description" content="Tiny, zero-dependency TypeScript library for movable, resizable panes. Mouse, touch, and pen. ~5 KB min+gzip." />
+    <meta property="og:url" content="https://silicondaydream.github.io/panes/" />
+    <meta property="og:image" content="https://silicondaydream.github.io/panes/og.svg" />
+    <meta property="og:image:alt" content="panes-ui logo — overlapping panes in blue and green on a dark background" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="panes-ui" />
+    <meta name="twitter:description" content="Tiny, zero-dependency TypeScript library for movable & resizable in-app panes with touch support." />
+    <meta name="twitter:image" content="https://silicondaydream.github.io/panes/og.svg" />
+
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='5' y='7' width='18' height='13' rx='2' fill='%234a90e2'/%3E%3Crect x='11' y='13' width='17' height='12' rx='2' fill='%237bd389'/%3E%3C/svg%3E" />
+    <link rel="alternate" type="text/plain" title="LLM index" href="/panes/llms.txt" />
+    <link rel="stylesheet" href="./dist/pane.css" />
+
+    <!-- Structured data: describes the software project to search engines and LLM retrievers -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "SoftwareSourceCode",
+          "@id": "https://silicondaydream.github.io/panes/#software",
+          "name": "panes-ui",
+          "description": "Tiny, dependency-free TypeScript library that turns any element into a movable, resizable in-app pane with unified mouse, touch, and pen input via Pointer Events.",
+          "url": "https://silicondaydream.github.io/panes/",
+          "codeRepository": "https://github.com/silicondaydream/panes",
+          "programmingLanguage": ["TypeScript", "JavaScript"],
+          "runtimePlatform": "Web Browser",
+          "applicationCategory": "DeveloperApplication",
+          "operatingSystem": "Any",
+          "license": "https://opensource.org/licenses/MIT",
+          "keywords": "modal, dialog, draggable, resizable, floating window, touch, pointer events, typescript, zero dependencies",
+          "author": {
+            "@type": "Person",
+            "name": "Chris Adams",
+            "url": "https://github.com/silicondaydream"
+          },
+          "maintainer": {
+            "@type": "Person",
+            "name": "Chris Adams"
+          },
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          "downloadUrl": "https://www.npmjs.com/package/panes-ui",
+          "softwareVersion": "1.1.1",
+          "sameAs": [
+            "https://www.npmjs.com/package/panes-ui",
+            "https://github.com/silicondaydream/panes"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://silicondaydream.github.io/panes/#website",
+          "url": "https://silicondaydream.github.io/panes/",
+          "name": "panes-ui",
+          "description": "Interactive demo and documentation for panes-ui.",
+          "inLanguage": "en",
+          "publisher": {
+            "@type": "Person",
+            "name": "Chris Adams"
+          },
+          "about": { "@id": "https://silicondaydream.github.io/panes/#software" }
+        }
+      ]
+    }
+    </script>
+    <style>
+      :root {
+        --bg: #00091d;
+        --bg-2: #0a1428;
+        --fg: #e7eaf0;
+        --fg-dim: #9aa3b2;
+        --accent: #7bd389;
+        --accent-2: #4a90e2;
+        --border: #1a2340;
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; color: var(--fg); }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, system-ui, sans-serif;
+        min-height: 100vh;
+        background-color: #000000;
+        background-image: radial-gradient(#ffffff33 1px, #00091d 1px);
+        background-size: 20px 20px;
+        background-attachment: fixed;
+      }
+      a { color: var(--accent-2); text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      code, kbd {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.9em;
+        background: rgba(255, 255, 255, 0.06);
+        padding: 1px 6px;
+        border-radius: 4px;
+      }
+      kbd {
+        border: 1px solid var(--border);
+        box-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+      }
+
+      header.hero {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 48px 24px 24px;
+      }
+      header .eyebrow {
+        font-size: 12px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--fg-dim);
+        margin: 0 0 10px;
+      }
+      header h1 {
+        font-size: clamp(32px, 5vw, 48px);
+        margin: 0 0 10px;
+        letter-spacing: -0.02em;
+        background: linear-gradient(90deg, #fff 0%, #cfd4de 60%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      header p.lede {
+        font-size: clamp(15px, 1.6vw, 18px);
+        color: var(--fg-dim);
+        max-width: 62ch;
+        line-height: 1.55;
+        margin: 0 0 22px;
+      }
+      header .links {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      header .links a {
+        padding: 7px 12px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        font-size: 13px;
+        color: var(--fg);
+        background: rgba(255, 255, 255, 0.02);
+      }
+      header .links a:hover { background: rgba(255, 255, 255, 0.06); text-decoration: none; }
+
+      main {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 0 24px 120px;
+      }
+
+      section.panel {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0));
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 20px 22px;
+        margin-bottom: 18px;
+      }
+      section.panel h2 {
+        font-size: 13px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--fg-dim);
+        margin: 0 0 14px;
+        font-weight: 600;
+      }
+
+      .spawn-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 10px;
+      }
+      button.spawn {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-align: left;
+        padding: 12px 14px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: var(--bg-2);
+        color: var(--fg);
+        cursor: pointer;
+        font-size: 14px;
+        font-family: inherit;
+        transition: transform 0.08s ease, border-color 0.15s ease, background 0.15s ease;
+      }
+      button.spawn:hover {
+        transform: translateY(-1px);
+        border-color: #2b3244;
+        background: #171b25;
+      }
+      button.spawn:active { transform: translateY(0); }
+      button.spawn .meta { display: flex; flex-direction: column; min-width: 0; }
+      button.spawn .meta b { font-weight: 600; font-size: 14px; }
+      button.spawn .meta span { font-size: 12px; color: var(--fg-dim); }
+
+      button.ghost {
+        padding: 7px 12px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: transparent;
+        color: var(--fg);
+        cursor: pointer;
+        font-size: 13px;
+        font-family: inherit;
+      }
+      button.ghost:hover { background: rgba(255, 255, 255, 0.04); }
+
+      .session-bar {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        margin-top: 16px;
+        padding-top: 14px;
+        border-top: 1px solid var(--border);
+      }
+
+      footer {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 24px 24px 40px;
+        color: var(--fg-dim);
+        font-size: 13px;
+        text-align: center;
+      }
+
+      /* Themed pane overrides — match the page */
+      .pane {
+        background: #161a23;
+        color: var(--fg);
+        border: 1px solid #222838;
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+      }
+      .pane .pane-title {
+        background: #1b2030;
+        border-bottom: 1px solid #222838;
+        font-size: 12px;
+        letter-spacing: 0.03em;
+      }
+      .pane .pane-content { padding: 14px; font-size: 14px; line-height: 1.5; }
+      .pane .pane-content p:first-child { margin-top: 0; }
+      .pane .pane-content p:last-child { margin-bottom: 0; }
+      .pane.accent { border-color: rgba(123, 211, 137, 0.4); }
+      .pane.accent .pane-title { color: var(--accent); }
+
+      /* Demo widgets inside panes */
+      .counter { display: flex; align-items: center; gap: 10px; justify-content: center; padding: 16px 0; }
+      .counter .val { font-size: 36px; font-weight: 700; min-width: 2ch; text-align: center; }
+      .counter button {
+        width: 40px; height: 40px; font-size: 20px;
+        border-radius: 8px; border: 1px solid var(--border);
+        background: #1f2432; color: var(--fg); cursor: pointer;
+      }
+      .counter button:hover { background: #262c3c; }
+
+      textarea.notes {
+        width: 100%; height: calc(100% - 0px);
+        resize: none;
+        background: #0f121a;
+        color: var(--fg);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 10px;
+        font-family: ui-monospace, monospace;
+        font-size: 13px;
+        line-height: 1.5;
+        outline: none;
+      }
+      textarea.notes:focus { border-color: var(--accent-2); }
+
+      .timer-wrap { text-align: center; padding: 8px 0; }
+      .timer-wrap .time { font-size: 44px; font-variant-numeric: tabular-nums; font-weight: 600; margin: 8px 0 12px; }
+      .timer-wrap .controls { display: flex; gap: 8px; justify-content: center; }
+      .timer-wrap button {
+        padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border);
+        background: #1f2432; color: var(--fg); cursor: pointer; font-size: 13px;
+      }
+
+      .swatches { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+      .swatches button {
+        aspect-ratio: 1 / 1; border: 0; border-radius: 6px; cursor: pointer;
+      }
+      .colorout {
+        margin-top: 10px; padding: 10px; border-radius: 6px;
+        border: 1px solid var(--border); text-align: center;
+        font-family: ui-monospace, monospace; font-size: 13px;
+      }
+
+      canvas.draw {
+        display: block;
+        width: 100%; height: 100%;
+        background: #0f121a;
+        border-radius: 6px;
+        touch-action: none;
+        cursor: crosshair;
+      }
+
+      @media (max-width: 560px) {
+        header.hero { padding: 32px 18px 14px; }
+        main { padding: 0 18px 100px; }
+        section.panel { padding: 16px; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="hero">
+      <p class="eyebrow">panes-ui</p>
+      <h1>Movable, resizable components — without the weight.</h1>
+      <p class="lede">
+        A zero-dependency TypeScript library that turns any
+        <code>&lt;div&gt;</code> into a draggable, resizable component.
+        Unified mouse, touch, and pen input. ~5 KB min+gzip.
+        Drag a titlebar, grab an edge, try it on your phone.
+      </p>
+      <div class="links">
+        <a href="https://www.npmjs.com/package/panes-ui" target="_blank" rel="noopener">📦 npm</a>
+        <a href="https://github.com/silicondaydream/panes" target="_blank" rel="noopener">★ GitHub</a>
+        <a href="https://github.com/silicondaydream/panes#readme" target="_blank" rel="noopener">📖 Docs</a>
+        <a href="https://bundlephobia.com/package/panes-ui" target="_blank" rel="noopener">📏 Bundle size</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="panel">
+        <h2>Give it a try!</h2>
+        <div class="spawn-grid">
+          <button class="spawn" data-spawn="notes"><span class="meta"><b>Notes</b><span>Scrollable textarea</span></span></button>
+          <button class="spawn" data-spawn="counter"><span class="meta"><b>Counter</b><span>Stateful widget</span></span></button>
+          <button class="spawn" data-spawn="timer"><span class="meta"><b>Timer</b><span>Tabular numerics</span></span></button>
+          <button class="spawn" data-spawn="colors"><span class="meta"><b>Color picker</b><span>Click a swatch</span></span></button>
+          <button class="spawn" data-spawn="draw"><span class="meta"><b>Draw</b><span>Touch-friendly canvas</span></span></button>
+          <button class="spawn" data-spawn="code"><span class="meta"><b>Code snippet</b><span>Install + use</span></span></button>
+          <button class="spawn" data-spawn="about"><span class="meta"><b>About</b><span>Features + links</span></span></button>
+          <button class="spawn" data-spawn="random"><span class="meta"><b>Random</b><span>Surprise pane</span></span></button>
+        </div>
+        <div class="session-bar">
+          <button class="ghost" id="cascade">Cascade</button>
+          <button class="ghost" id="focus-next">Cycle focus</button>
+          <button class="ghost" id="close-all">Close all</button>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <code>npm install panes-ui</code> · MIT · 
+      <a href="https://github.com/silicondaydream/panes" target="_blank" rel="noopener">source on GitHub</a>
+    </footer>
+
+    <!-- Hidden prototype panes are cloned on spawn -->
+    <div id="__pane-templates" hidden>
+      <template id="tpl-notes">
+        <div style="width:360px;height:260px">
+          <div class="pane-title"></div>
+          <button class="pane-close" aria-label="Close">&times;</button>
+          <div class="pane-content" style="padding:10px">
+            <textarea class="notes" placeholder="Type anything. Resize the pane — the textarea follows."></textarea>
+          </div>
+        </div>
+      </template>
+      <template id="tpl-counter">
+        <div style="width:260px;height:180px">
+          <div class="pane-title"></div>
+          <button class="pane-close" aria-label="Close">&times;</button>
+          <div class="pane-content">
+            <div class="counter">
+              <button data-act="dec">−</button>
+              <span class="val">0</span>
+              <button data-act="inc">+</button>
+            </div>
+            <p style="text-align:center;color:var(--fg-dim);margin:4px 0 0;font-size:12px">
+              State lives on the pane element.
+            </p>
+          </div>
+        </div>
+      </template>
+      <template id="tpl-timer">
+        <div style="width:260px;height:200px">
+          <div class="pane-title"></div>
+          <button class="pane-close" aria-label="Close">&times;</button>
+          <div class="pane-content">
+            <div class="timer-wrap">
+              <div class="time">00:00.0</div>
+              <div class="controls">
+                <button data-act="start">Start</button>
+                <button data-act="stop">Stop</button>
+                <button data-act="reset">Reset</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+      <template id="tpl-colors">
+        <div style="width:280px;height:240px">
+          <div class="pane-title"></div>
+          <button class="pane-close" aria-label="Close">&times;</button>
+          <div class="pane-content">
+            <div class="swatches"></div>
+            <div class="colorout">click a swatch</div>
+          </div>
+        </div>
+      </template>
+      <template id="tpl-draw">
+        <div style="width:340px;height:300px">
+          <div class="pane-title"></div>
+          <button class="pane-close" aria-label="Close">&times;</button>
+          <div class="pane-content" style="padding:8px">
+            <canvas class="draw"></canvas>
+          </div>
+        </div>
+      </template>
+      <template id="tpl-code">
+        <div style="width:440px;height:280px">
+          <div class="pane-title"></div>
+          <button class="pane-close" aria-label="Close">&times;</button>
+          <div class="pane-content">
+<pre style="margin:0;font-family:ui-monospace,monospace;font-size:12.5px;line-height:1.5;white-space:pre-wrap"><span style="color:#9aa3b2">// install</span>
+npm install panes-ui
+
+<span style="color:#9aa3b2">// use</span>
+import { Pane } from "panes-ui";
+import "panes-ui/style.css";
+
+const p = new Pane("#my-pane", { title: "Hello" });
+p.open();</pre>
+          </div>
+        </div>
+      </template>
+      <template id="tpl-about">
+        <div style="width:380px;height:300px">
+          <div class="pane-title"></div>
+          <button class="pane-close" aria-label="Close">&times;</button>
+          <div class="pane-content">
+            <p><b>panes-ui</b> makes any element a movable, resizable pane.</p>
+            <ul style="padding-left:18px;margin:8px 0">
+              <li>Zero dependencies · ~5 KB min+gzip</li>
+              <li>Pointer Events (mouse + touch + pen)</li>
+              <li>rAF-coalesced, pointer-capture drag</li>
+              <li>ARIA dialog defaults, Esc to close</li>
+              <li>TypeScript <code>.d.ts</code> types</li>
+            </ul>
+            <p style="color:var(--fg-dim);font-size:12px">
+              Try resizing this pane from a corner — the content reflows.
+            </p>
+          </div>
+        </div>
+      </template>
+    </div>
+
+    <script src="./dist/panes.global.js"></script>
+    <script>
+      (function () {
+        "use strict";
+        const { Pane, manager } = Panes;
+
+        const DEFAULT_OPTS = {
+          movable: true,
+          resizable: true,
+          constrain: true,
+          closeOnEscape: true,
+          center: true,
+        };
+
+        function cloneTpl(id) {
+          const tpl = document.getElementById(id);
+          return tpl.content.firstElementChild.cloneNode(true);
+        }
+
+        const titles = {
+          notes: "Notes", counter: "Counter", timer: "Timer",
+          colors: "Color picker", draw: "Sketchpad", code: "Install & use",
+          about: "About panes-ui",
+        };
+
+        function spawn(kind) {
+          const el = cloneTpl("tpl-" + kind);
+          document.body.appendChild(el);
+
+          const opts = Object.assign({
+            title: titles[kind] || "Pane",
+            minWidth: 200,
+            minHeight: 140,
+            onClose: function () {
+              // Detach after close so spawning always produces a fresh pane.
+              setTimeout(function () { p.destroy(); el.remove(); }, 200);
+            },
+          }, DEFAULT_OPTS);
+
+          const p = new Pane(el, opts);
+          wireWidget(kind, el, p);
+          p.open();
+        }
+
+        // Per-kind interactive wiring
+        function wireWidget(kind, el, pane) {
+          if (kind === "counter") {
+            const val = el.querySelector(".val");
+            let n = 0;
+            el.querySelector('[data-act="inc"]').addEventListener("click", function () { val.textContent = ++n; });
+            el.querySelector('[data-act="dec"]').addEventListener("click", function () { val.textContent = --n; });
+          } else if (kind === "timer") {
+            const out = el.querySelector(".time");
+            let t0 = 0, acc = 0, raf = 0;
+            function tick() {
+              const ms = acc + (t0 ? performance.now() - t0 : 0);
+              const s = Math.floor(ms / 1000);
+              const mm = String(Math.floor(s / 60)).padStart(2, "0");
+              const ss = String(s % 60).padStart(2, "0");
+              const d = Math.floor((ms % 1000) / 100);
+              out.textContent = mm + ":" + ss + "." + d;
+              raf = requestAnimationFrame(tick);
+            }
+            el.querySelector('[data-act="start"]').addEventListener("click", function () {
+              if (!t0) { t0 = performance.now(); raf = requestAnimationFrame(tick); }
+            });
+            el.querySelector('[data-act="stop"]').addEventListener("click", function () {
+              if (t0) { acc += performance.now() - t0; t0 = 0; cancelAnimationFrame(raf); }
+            });
+            el.querySelector('[data-act="reset"]').addEventListener("click", function () {
+              acc = 0; t0 = 0; cancelAnimationFrame(raf); out.textContent = "00:00.0";
+            });
+          } else if (kind === "colors") {
+            const grid = el.querySelector(".swatches");
+            const out = el.querySelector(".colorout");
+            const palette = ["#f87171","#fb923c","#facc15","#4ade80","#34d399","#60a5fa","#818cf8","#a78bfa","#f472b6","#fda4af"];
+            palette.forEach(function (hex) {
+              const b = document.createElement("button");
+              b.style.background = hex;
+              b.setAttribute("aria-label", hex);
+              b.addEventListener("click", function () {
+                out.textContent = hex;
+                out.style.background = hex;
+                out.style.color = "#0b0d12";
+              });
+              grid.appendChild(b);
+            });
+          } else if (kind === "draw") {
+            const canvas = el.querySelector("canvas.draw");
+            const ctx = canvas.getContext("2d");
+            function resize() {
+              const r = canvas.getBoundingClientRect();
+              const dpr = window.devicePixelRatio || 1;
+              canvas.width = Math.floor(r.width * dpr);
+              canvas.height = Math.floor(r.height * dpr);
+              ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+              ctx.lineCap = "round";
+              ctx.lineJoin = "round";
+              ctx.lineWidth = 2;
+              ctx.strokeStyle = "#7bd389";
+            }
+            let drawing = false, lastX = 0, lastY = 0;
+            canvas.addEventListener("pointerdown", function (e) {
+              drawing = true;
+              canvas.setPointerCapture(e.pointerId);
+              const r = canvas.getBoundingClientRect();
+              lastX = e.clientX - r.left; lastY = e.clientY - r.top;
+              e.stopPropagation();
+            });
+            canvas.addEventListener("pointermove", function (e) {
+              if (!drawing) return;
+              const r = canvas.getBoundingClientRect();
+              const x = e.clientX - r.left, y = e.clientY - r.top;
+              ctx.beginPath(); ctx.moveTo(lastX, lastY); ctx.lineTo(x, y); ctx.stroke();
+              lastX = x; lastY = y;
+              e.stopPropagation();
+            });
+            ["pointerup","pointercancel","pointerleave"].forEach(function (ev) {
+              canvas.addEventListener(ev, function () { drawing = false; });
+            });
+            // Reflow canvas on pane resize
+            const origOnResize = (pane.opts && pane.opts.onResize) || function () {};
+            // Best effort: observe size changes via ResizeObserver
+            if (window.ResizeObserver) {
+              const ro = new ResizeObserver(resize);
+              ro.observe(canvas);
+            }
+            setTimeout(resize, 0);
+          }
+        }
+
+        // Wire spawn buttons
+        const kinds = ["notes","counter","timer","colors","draw","code","about"];
+        document.querySelectorAll("button.spawn").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            const kind = btn.getAttribute("data-spawn");
+            if (kind === "random") {
+              spawn(kinds[Math.floor(Math.random() * kinds.length)]);
+            } else {
+              spawn(kind);
+            }
+          });
+        });
+
+        // Session controls
+        document.getElementById("close-all").addEventListener("click", function () {
+          manager.list().slice().forEach(function (p) { p.close(); });
+        });
+        document.getElementById("cascade").addEventListener("click", function () {
+          let i = 0;
+          manager.list().forEach(function (p) {
+            p.setPosition(40 + i * 28, 80 + i * 28);
+            p.focus();
+            i++;
+          });
+        });
+        document.getElementById("focus-next").addEventListener("click", function () {
+          const list = manager.list();
+          if (!list.length) return;
+          list[0].focus();
+        });
+
+      })();
+    </script>
+  </body>
+</html>

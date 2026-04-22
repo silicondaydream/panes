@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] — 2026-04-22
+
+### Fixed
+- First `open()` call did not center or fire `onOpen` when the pane element was hidden by a stylesheet rule (inline `display` was empty). Panes now always start in the "not yet opened" state, so the first `open()` reliably centers and fires `onOpen`. This is what caused freshly-spawned panes to render in page flow (e.g. below the page content) until a window resize reflowed them.
+
 ## [1.1.0] — 2026-04-22
 
 ### Changed

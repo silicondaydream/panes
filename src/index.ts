@@ -10,4 +10,4 @@ export type {
   InteractionMode,
 } from "./types.js";
 
-export const version = "1.1.0";
+export const version = "1.1.1";

@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <pattern id="dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+      <rect width="20" height="20" fill="#00091d"/>
+      <circle cx="10" cy="10" r="1" fill="#ffffff33"/>
+    </pattern>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="18" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+    <linearGradient id="titleGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#cfd4de"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="#000000"/>
+  <rect width="1200" height="630" fill="url(#dots)"/>
+
+  <!-- Decorative overlapping panes -->
+  <g filter="url(#shadow)">
+    <rect x="150" y="180" width="360" height="230" rx="14" fill="#161a23" stroke="#2b3244" stroke-width="1"/>
+    <rect x="150" y="180" width="360" height="38" rx="14" fill="#1b2030"/>
+    <rect x="150" y="215" width="360" height="3" fill="#222838"/>
+    <circle cx="178" cy="199" r="5" fill="#4a90e2" opacity="0.8"/>
+    <circle cx="196" cy="199" r="5" fill="#7bd389" opacity="0.8"/>
+    <circle cx="214" cy="199" r="5" fill="#ffffff22"/>
+    <rect x="180" y="250" width="180" height="10" rx="3" fill="#2a3148"/>
+    <rect x="180" y="274" width="260" height="10" rx="3" fill="#222838"/>
+    <rect x="180" y="298" width="220" height="10" rx="3" fill="#222838"/>
+    <rect x="180" y="322" width="150" height="10" rx="3" fill="#222838"/>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="430" y="270" width="420" height="260" rx="14" fill="#161a23" stroke="rgba(123,211,137,0.4)" stroke-width="1.5"/>
+    <rect x="430" y="270" width="420" height="38" rx="14" fill="#1b2030"/>
+    <rect x="430" y="305" width="420" height="3" fill="#222838"/>
+    <text x="450" y="294" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#7bd389">panes-ui</text>
+    <rect x="460" y="340" width="360" height="160" rx="8" fill="#0f121a"/>
+    <path d="M480 460 Q520 410 560 440 T640 430 T720 400 T800 450" stroke="#7bd389" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- Text block (right side) -->
+  <g>
+    <text x="880" y="230" font-family="-apple-system, system-ui, sans-serif" font-size="72" font-weight="700" fill="url(#titleGrad)" letter-spacing="-2">panes-ui</text>
+    <text x="880" y="290" font-family="-apple-system, system-ui, sans-serif" font-size="28" fill="#e7eaf0" font-weight="500">Movable &amp; resizable</text>
+    <text x="880" y="326" font-family="-apple-system, system-ui, sans-serif" font-size="28" fill="#e7eaf0" font-weight="500">in-app panes.</text>
+
+    <g transform="translate(880, 380)">
+      <rect width="280" height="40" rx="8" fill="none" stroke="#2b3244" stroke-width="1"/>
+      <text x="16" y="27" font-family="ui-monospace, Menlo, monospace" font-size="16" fill="#e7eaf0">npm install panes-ui</text>
+    </g>
+
+    <text x="880" y="460" font-family="-apple-system, system-ui, sans-serif" font-size="16" fill="#9aa3b2">~5 KB · zero dependencies · TypeScript</text>
+    <text x="880" y="484" font-family="-apple-system, system-ui, sans-serif" font-size="16" fill="#9aa3b2">mouse · touch · pen</text>
+  </g>
+</svg>

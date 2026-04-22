@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+
+# Open to all reputable AI and search crawlers. No crawl-delay; this is a static demo.
+User-agent: GPTBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: CCBot
+Allow: /
+
+Sitemap: https://silicondaydream.github.io/panes/sitemap.xml

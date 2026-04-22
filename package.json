@@ -1,6 +1,6 @@
 {
   "name": "panes-ui",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Tiny, dependency-free movable & resizable in-app modal panes with first-class touch support. Framework-agnostic. TypeScript.",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -33,6 +33,7 @@
   "scripts": {
     "build": "tsup && npm run build:css",
     "build:css": "node -e \"require('fs').copyFileSync('src/pane.css','dist/pane.css')\"",
+    "build:demo": "npm run build && node -e \"const fs=require('fs');fs.rmSync('examples/dist',{recursive:true,force:true});fs.mkdirSync('examples/dist',{recursive:true});for(const f of ['pane.css','panes.global.js'])fs.copyFileSync('dist/'+f,'examples/dist/'+f);fs.copyFileSync('llms.txt','examples/llms.txt')\"",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run typecheck && npm run build",

@@ -1,0 +1,9 @@
+/* TEAM */
+Author: Chris Adams
+GitHub: https://github.com/silicondaydream
+
+/* SITE */
+Last update: 2026/04/22
+Standards: HTML5, CSS, TypeScript
+Components: panes-ui (self-hosted demo)
+Software: tsup, TypeScript

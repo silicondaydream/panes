@@ -130,7 +130,10 @@ export class Pane {
 
     this.attach();
     this.manager.register(this);
-    this.visible = this.el.style.display !== "none" && this.el.isConnected;
+    // Panes always start "not yet opened" — callers must invoke open() to
+    // show them. This guarantees the first open() triggers centering and
+    // fires onOpen, even when the stylesheet hides the element by default.
+    this.visible = false;
   }
 
   private applyAriaRoles(): void {
