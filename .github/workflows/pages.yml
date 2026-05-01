@@ -37,7 +37,7 @@ jobs:
           cp dist/pane.css dist/panes.global.js site/dist/
           # Defensive: disable Jekyll processing (preserves files starting with _, .well-known, etc.)
           touch site/.nojekyll
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: site
 
