@@ -9,6 +9,11 @@ on:
 permissions:
   contents: read
 
+# Cancel superseded runs on the same PR/branch.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -31,3 +36,5 @@ jobs:
           test -f dist/index.d.ts
           test -f dist/panes.global.js
           test -f dist/pane.css
+      - name: Check package exports and types
+        run: npx --yes @arethetypeswrong/cli@0.18.5 --pack . --exclude-entrypoints ./style.css ./pane.css

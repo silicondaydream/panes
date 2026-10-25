@@ -43,6 +43,11 @@ interface ResolvedOptions {
   onFocus?: PaneOptions["onFocus"];
 }
 
+interface ContentInsets {
+  top: number;
+  left: number;
+}
+
 interface DragStart {
   x: number;
   y: number;
@@ -71,7 +76,10 @@ export class Pane {
   private pointerId: number | null = null;
   private start: DragStart | null = null;
   private rafId = 0;
+  private winResizeRafId = 0;
   private pending: { x: number; y: number } | null = null;
+  /** Content insets cached for the duration of a resize gesture. */
+  private contentInsets: ContentInsets | null | undefined;
   private destroyed = false;
   private visible = false;
 
@@ -178,6 +186,7 @@ export class Pane {
     this.releaseCapture();
     this.manager.unregister(this);
     if (this.rafId) cancelAnimationFrame(this.rafId);
+    if (this.winResizeRafId) cancelAnimationFrame(this.winResizeRafId);
   }
 
   // ---- open / close ------------------------------------------------------
@@ -272,15 +281,22 @@ export class Pane {
    * over padding via CSS.
    */
   private layoutContent(): void {
-    if (!this.content) return;
-    const cs = getComputedStyle(this.content);
-    if (cs.position !== "absolute" && cs.position !== "fixed") return;
-    const top = parseFloat(cs.top) || 0;
-    const left = parseFloat(cs.left) || 0;
+    const insets =
+      this.contentInsets !== undefined ? this.contentInsets : this.measureContentInsets();
+    if (!insets || !this.content) return;
+    const { top, left } = insets;
     const w = this.el.clientWidth - left * 2;
     const h = this.el.clientHeight - top * 2;
     if (w > 0) this.content.style.width = w + "px";
     if (h > 0) this.content.style.height = h + "px";
+  }
+
+  /** Insets of an absolutely-positioned content element, or null if it isn't one. */
+  private measureContentInsets(): ContentInsets | null {
+    if (!this.content) return null;
+    const cs = getComputedStyle(this.content);
+    if (cs.position !== "absolute" && cs.position !== "fixed") return null;
+    return { top: parseFloat(cs.top) || 0, left: parseFloat(cs.left) || 0 };
   }
 
   // ---- event handlers ----------------------------------------------------
@@ -295,9 +311,14 @@ export class Pane {
   }
 
   private onWinResize(): void {
-    if (!this.opts.constrain || !this.visible) return;
-    // Use offset coords so this works for absolute and fixed panes alike.
-    this.setPosition(this.el.offsetLeft, this.el.offsetTop);
+    if (!this.opts.constrain || !this.visible || this.winResizeRafId) return;
+    // Coalesce bursts of resize events into one re-clamp per frame.
+    this.winResizeRafId = requestAnimationFrame(() => {
+      this.winResizeRafId = 0;
+      if (!this.visible || this.destroyed) return;
+      // Use offset coords so this works for absolute and fixed panes alike.
+      this.setPosition(this.el.offsetLeft, this.el.offsetTop);
+    });
   }
 
   private onPointerDown(evt: PointerEvent): void {
@@ -319,6 +340,8 @@ export class Pane {
     if (edge) {
       this.mode = "resize";
       this.edge = edge;
+      // Content styles don't change mid-gesture; avoid a getComputedStyle per frame.
+      this.contentInsets = this.measureContentInsets();
     } else if (draggable) {
       this.mode = "drag";
     } else {
@@ -347,7 +370,8 @@ export class Pane {
   }
 
   private onHoverMove(evt: PointerEvent): void {
-    if (this.mode || !this.opts.resizable) return;
+    // Touch has no hover cursor, so skip the hit-test entirely.
+    if (this.mode || !this.opts.resizable || evt.pointerType === "touch") return;
     const rect = this.el.getBoundingClientRect();
     const edge = edgeAt(rect, evt.clientX, evt.clientY, RESIZE_EDGE);
     if (edge !== this.edge) {
@@ -429,15 +453,19 @@ export class Pane {
   private onPointerUp(evt?: PointerEvent): void {
     if (evt && evt.pointerId !== this.pointerId) return;
     this.releaseCapture();
+    if (this.rafId) {
+      cancelAnimationFrame(this.rafId);
+      this.rafId = 0;
+      // Apply the last coalesced move so the pane ends exactly under the pointer.
+      if (this.pending && this.mode === "drag") this.applyDrag(this.pending);
+      else if (this.pending && this.mode === "resize") this.applyResize(this.pending);
+    }
     if (this.mode) this.el.classList.remove("pane--" + this.mode);
     this.mode = "";
     this.edge = "";
     this.start = null;
     this.pending = null;
-    if (this.rafId) {
-      cancelAnimationFrame(this.rafId);
-      this.rafId = 0;
-    }
+    this.contentInsets = undefined;
     this.el.style.cursor = "";
   }
 

@@ -23,6 +23,8 @@ export class PaneManager {
   }
 
   raise(pane: Pane): void {
+    // Already on top: skip the style write and don't burn a z-index.
+    if (pane.el.style.zIndex === String(this.top)) return;
     if (this.top >= Z_RENORMALIZE_AT) this.renormalize();
     this.top += 1;
     pane.el.style.zIndex = String(this.top);
