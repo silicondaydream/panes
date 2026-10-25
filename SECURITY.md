@@ -27,7 +27,7 @@ You should receive an acknowledgement within 72 hours. Fixes are typically relea
 
 In scope:
 
-- XSS, prototype pollution, or DoS caused by `panes` public APIs with documented inputs.
+- XSS, prototype pollution, or DoS caused by `panes-ui` public APIs with documented inputs.
 - Listener-leak or teardown bugs with observable security impact.
 
 Out of scope:

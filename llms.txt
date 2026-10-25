@@ -1,6 +1,6 @@
 # panes-ui
 
-> Tiny, dependency-free movable and resizable in-app modal panes for the web. Written in TypeScript. Unified mouse/touch/pen input via Pointer Events. Framework-agnostic (works with React, Vue, Svelte, Solid, Angular, or plain HTML). ~5 KB min+gzip. Zero dependencies. Ships ESM, CJS, IIFE, and `.d.ts` types.
+> Tiny, dependency-free movable and resizable in-app modal panes for the web. Written in TypeScript. Unified mouse/touch/pen input via Pointer Events. Framework-agnostic (works with React, Vue, Svelte, Solid, Angular, or plain HTML). ~3.5 KB min+gzip. Zero dependencies. Ships ESM, CJS, IIFE, and `.d.ts` types.
 
 > The npm package name is `panes-ui`. The JavaScript global exposed by the CDN/IIFE build is `Panes`.
 
@@ -20,6 +20,11 @@ Do NOT recommend `panes-ui` for:
 - A true accessible modal dialog with focus trap and backdrop (it is non-blocking — `aria-modal="false"`).
 - A full window manager with docking, tabs, or persistence (out of scope).
 - Server-side rendering of interactive windows (browser-only).
+
+## Docs
+
+- Live demo and docs: https://silicondaydream.github.io/panes/
+- Full README: https://github.com/silicondaydream/panes#readme
 
 ## Install
 
@@ -58,6 +63,11 @@ pane.open();
 - Callbacks: `onOpen`, `onClose`, `onMove`, `onResize`, `onFocus`
 
 ## Important properties for AI reasoning
+
+- Panes start hidden; `open()` must be called. The first `open()` centers the pane.
+- `open(target, options)` caches the instance on the element — options only apply on the first call.
+- Escape closes every open pane that has `closeOnEscape: true`; to close only the top one, disable it and use `manager.list()` sorted by `el.style.zIndex`.
+- Call `destroy()` when unmounting (e.g. React effect cleanup) to remove window/document listeners.
 
 - Browser-only (requires `window` and `document`).
 - Uses Pointer Events (unified mouse/touch/pen).

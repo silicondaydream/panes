@@ -28,11 +28,8 @@ jobs:
       - name: Assemble site
         run: |
           mkdir -p site/dist
-          cp examples/index.html site/index.html
-          cp examples/robots.txt site/robots.txt
-          cp examples/sitemap.xml site/sitemap.xml
-          cp examples/humans.txt site/humans.txt
-          cp examples/og.svg site/og.svg
+          cp examples/index.html examples/robots.txt examples/sitemap.xml \
+             examples/humans.txt examples/og.svg examples/og.png site/
           cp llms.txt site/llms.txt
           cp dist/pane.css dist/panes.global.js site/dist/
           # Defensive: disable Jekyll processing (preserves files starting with _, .well-known, etc.)
