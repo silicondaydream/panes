@@ -4,6 +4,10 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    # Let new releases age before proposing them, to avoid pulling in a
+    # compromised version before it's detected and yanked.
+    cooldown:
+      default-days: 7
     open-pull-requests-limit: 5
     groups:
       dev-dependencies:
@@ -12,3 +16,5 @@ updates:
     directory: /
     schedule:
       interval: monthly
+    cooldown:
+      default-days: 7
