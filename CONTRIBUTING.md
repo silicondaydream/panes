@@ -4,7 +4,7 @@ Thanks for your interest in `panes-ui`! Bug reports, patches, and docs are all w
 
 ## Development setup
 
-Requires **Node 16+**.
+Requires **Node 22.18+** (or 24.11+) for development — the build toolchain (tsup 9) needs it. The published library itself has no Node requirement; it runs in the browser.
 
 ```bash
 git clone https://github.com/silicondaydream/panes.git
