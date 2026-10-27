@@ -17,6 +17,7 @@
   <rect width="1200" height="630" fill="url(#dots)"/>
 
   <!-- Decorative overlapping panes -->
+  <g transform="translate(-80, 0)">
   <g filter="url(#shadow)">
     <rect x="150" y="180" width="360" height="230" rx="14" fill="#161a23" stroke="#2b3244" stroke-width="1"/>
     <rect x="150" y="180" width="360" height="38" rx="14" fill="#1b2030"/>
@@ -39,18 +40,20 @@
     <path d="M480 460 Q520 410 560 440 T640 430 T720 400 T800 450" stroke="#7bd389" stroke-width="2.5" fill="none" stroke-linecap="round"/>
   </g>
 
+  </g>
+
   <!-- Text block (right side) -->
   <g>
-    <text x="880" y="230" font-family="-apple-system, system-ui, sans-serif" font-size="72" font-weight="700" fill="url(#titleGrad)" letter-spacing="-2">panes-ui</text>
-    <text x="880" y="290" font-family="-apple-system, system-ui, sans-serif" font-size="28" fill="#e7eaf0" font-weight="500">Movable &amp; resizable</text>
-    <text x="880" y="326" font-family="-apple-system, system-ui, sans-serif" font-size="28" fill="#e7eaf0" font-weight="500">in-app panes.</text>
+    <text x="800" y="230" font-family="-apple-system, system-ui, sans-serif" font-size="72" font-weight="700" fill="url(#titleGrad)" letter-spacing="-2">panes-ui</text>
+    <text x="800" y="290" font-family="-apple-system, system-ui, sans-serif" font-size="28" fill="#e7eaf0" font-weight="500">Movable &amp; resizable</text>
+    <text x="800" y="326" font-family="-apple-system, system-ui, sans-serif" font-size="28" fill="#e7eaf0" font-weight="500">in-app panes.</text>
 
-    <g transform="translate(880, 380)">
+    <g transform="translate(800, 380)">
       <rect width="280" height="40" rx="8" fill="none" stroke="#2b3244" stroke-width="1"/>
       <text x="16" y="27" font-family="ui-monospace, Menlo, monospace" font-size="16" fill="#e7eaf0">npm install panes-ui</text>
     </g>
 
-    <text x="880" y="460" font-family="-apple-system, system-ui, sans-serif" font-size="16" fill="#9aa3b2">~5 KB · zero dependencies · TypeScript</text>
-    <text x="880" y="484" font-family="-apple-system, system-ui, sans-serif" font-size="16" fill="#9aa3b2">mouse · touch · pen</text>
+    <text x="800" y="460" font-family="-apple-system, system-ui, sans-serif" font-size="16" fill="#9aa3b2">~3.5 KB · zero dependencies · TypeScript</text>
+    <text x="800" y="484" font-family="-apple-system, system-ui, sans-serif" font-size="16" fill="#9aa3b2">mouse · touch · pen</text>
   </g>
 </svg>

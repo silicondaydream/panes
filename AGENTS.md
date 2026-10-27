@@ -17,7 +17,8 @@ src/
   types.ts      # public TypeScript types
   pane.css      # default styles (copied to dist/ as-is)
 examples/
-  basic.html    # plain-HTML demo using the IIFE build
+  index.html    # demo + docs site (GitHub Pages), uses the IIFE build
+  og.svg/og.png # social preview image (og.png is rendered from og.svg)
 dist/           # build output — DO NOT edit by hand
 ```
 

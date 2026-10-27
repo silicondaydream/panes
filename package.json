@@ -90,7 +90,7 @@
   "bugs": {
     "url": "https://github.com/silicondaydream/panes/issues"
   },
-  "homepage": "https://github.com/silicondaydream/panes#readme",
+  "homepage": "https://silicondaydream.github.io/panes/",
   "funding": "https://github.com/sponsors/silicondaydream",
   "engines": {
     "node": ">=16"

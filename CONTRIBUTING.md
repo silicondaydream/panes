@@ -15,7 +15,7 @@ npm run typecheck
 npm run build
 ```
 
-Open `examples/basic.html` after a build to smoke-test changes.
+To smoke-test changes, run `npm run build:demo` and open `examples/index.html` in a browser (it loads the freshly built `examples/dist/panes.global.js`). That page is also the site deployed to GitHub Pages.
 
 ## Pull requests
 
