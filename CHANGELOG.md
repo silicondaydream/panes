@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+- The final pointer move of a drag/resize was discarded if `pointerup` arrived before the next animation frame, so quick flicks could leave the pane short of the pointer. The pending move is now applied on release.
+- CommonJS consumers on `moduleResolution: node16`/`nodenext` got ESM type declarations for the `require` entry ("masquerading as ESM"). The `exports` map now points `require` at `dist/index.d.cts`.
+- Text could still be selected while dragging in Safari, which needs the `-webkit-user-select` prefix. Added it to `pane.css`.
+
+### Performance
+- Window `resize` bursts are coalesced to one re-clamp per pane per animation frame.
+- Resize gestures read the content element's computed insets once at gesture start, not on every frame.
+- `focus()`/`pointerdown` on a pane that is already on top no longer writes a new z-index.
+- Touch pointers skip the hover hit-test used for the resize cursor.
+
 ## [1.1.1] — 2026-04-22
 
 ### Fixed
