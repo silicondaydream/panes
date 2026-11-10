@@ -8,7 +8,7 @@
 [![bundle size](https://img.shields.io/bundlephobia/minzip/panes-ui)](https://bundlephobia.com/package/panes-ui)
 [![CI](https://github.com/silicondaydream/panes/actions/workflows/ci.yml/badge.svg)](https://github.com/silicondaydream/panes/actions/workflows/ci.yml)
 
-**[Live demo & docs →](https://silicondaydream.github.io/panes/)**
+**[Live demo & docs →](https://silicondaydream.github.io/panes/)** · **[♥ Sponsor](https://github.com/sponsors/silicondaydream)**
 
 - ~3.5 KB min+gzip, **zero dependencies**
 - Works with **mouse, touch, and pen** via [Pointer Events](https://developer.mozilla.org/docs/Web/API/Pointer_events)
@@ -36,6 +36,7 @@
 - [Building from source](#building-from-source)
 - [Security](#security)
 - [Changelog](CHANGELOG.md)
+- [Sponsor](#sponsor)
 - [License](#license)
 
 ---
@@ -479,6 +480,12 @@ Found a vulnerability? See [SECURITY.md](SECURITY.md).
 - **Keyboard**: Escape closes; close button is focusable.
 - **Defensive errors**: descriptive throws on bad input.
 - **TypeScript** types out of the box.
+
+---
+
+## Sponsor
+
+`panes-ui` is free and MIT-licensed, maintained in spare time. If it's useful to you, consider [sponsoring on GitHub](https://github.com/sponsors/silicondaydream) — it helps keep the library maintained and dependency-free. Stars, bug reports and docs fixes help too.
 
 ---
 
