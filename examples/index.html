@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>panes-ui — tiny, dependency-free movable & resizable in-app panes</title>
+    <title>panes-ui — draggable, resizable panes for the web</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="description" content="panes-ui is a tiny (~3.5 KB), zero-dependency TypeScript library that turns any div into a movable, resizable in-app pane. Works with mouse, touch, and pen. ESM + CJS + IIFE. React / Vue / Svelte friendly." />
     <meta name="author" content="Chris Adams" />
@@ -167,8 +167,22 @@
       }
       nav.top .brand { font-weight: 700; color: var(--fg); white-space: nowrap; }
       nav.top ul { display: flex; gap: 16px; list-style: none; margin: 0; padding: 0; }
-      nav.top ul a { color: var(--fg-dim); font-size: 14px; white-space: nowrap; }
+      nav.top ul a { display: inline-block; padding: 4px 0; color: var(--fg-dim); font-size: 14px; white-space: nowrap; }
       nav.top ul a:hover { color: var(--fg); text-decoration: none; }
+      nav.top ul a.active { color: var(--fg); box-shadow: inset 0 -2px 0 var(--accent); }
+      nav.top .sponsor { margin-left: auto; }
+      a.sponsor {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        white-space: nowrap;
+        font-size: 13px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(244, 114, 182, 0.45);
+        color: #f9a8d4;
+      }
+      a.sponsor:hover { background: rgba(244, 114, 182, 0.1); text-decoration: none; }
 
       /* ---- hero ---- */
       header.hero {
@@ -244,6 +258,7 @@
         background: rgba(255, 255, 255, 0.02);
       }
       header .links a:hover { background: rgba(255, 255, 255, 0.06); text-decoration: none; }
+      header .links a.sponsor { color: #f9a8d4; border-color: rgba(244, 114, 182, 0.45); }
 
       main {
         max-width: 980px;
@@ -539,17 +554,16 @@
           <li><a href="#recipes">Recipes</a></li>
           <li><a href="https://github.com/silicondaydream/panes">GitHub</a></li>
         </ul>
+        <a class="sponsor" href="https://github.com/sponsors/silicondaydream"><span aria-hidden="true">♥</span> Sponsor</a>
       </div>
     </nav>
 
     <header class="hero" id="top">
-      <p class="eyebrow">panes-ui <span class="ver" id="ver">v1.1.1</span></p>
-      <h1>Movable, resizable panes — without the weight.</h1>
+      <p class="eyebrow"><span class="ver" id="ver">v1.1.1</span></p>
+      <h1>Draggable, resizable panes for the web.</h1>
       <p class="lede">
-        A zero-dependency TypeScript library that turns any
-        <code>&lt;div&gt;</code> into a draggable, resizable in-app window.
-        Unified mouse, touch, and pen input. ~3.5 KB min+gzip.
-        Drag a titlebar, grab an edge, try it on your phone.
+        Turn any <code>&lt;div&gt;</code> into a window you can move and resize
+        with a mouse, finger, or pen. No dependencies, about 3.5 KB.
       </p>
       <div class="cta">
         <span class="install-pill"><span><span class="prompt">$ </span><span data-copy-src>npm install panes-ui</span></span><button class="copy" type="button">Copy</button></span>
@@ -560,6 +574,7 @@
         <a href="https://github.com/silicondaydream/panes#readme">README</a>
         <a href="https://github.com/silicondaydream/panes/blob/main/CHANGELOG.md">Changelog</a>
         <a href="https://bundlephobia.com/package/panes-ui">Bundle size</a>
+        <a class="sponsor" href="https://github.com/sponsors/silicondaydream"><span aria-hidden="true">♥</span> Sponsor</a>
       </div>
     </header>
 
@@ -821,10 +836,18 @@ document.addEventListener(<span class="s">"keydown"</span>, (e) =&gt; {
         <h3>A true modal</h3>
         <p>Panes are non-blocking (<code>aria-modal="false"</code>). For a blocking dialog, put a backdrop behind the pane, set <code>aria-modal="true"</code> on the element yourself (the library won't overwrite it), and trap focus inside, or use the native <code>&lt;dialog&gt;</code> element.</p>
       </section>
+
+      <section class="panel" id="support" aria-labelledby="sup-h">
+        <h2 id="sup-h">Support the project</h2>
+        <p>panes-ui is free, MIT-licensed, and maintained in spare time. If it saves you time, sponsoring helps keep it maintained and dependency-free.</p>
+        <p><a class="sponsor" href="https://github.com/sponsors/silicondaydream"><span aria-hidden="true">♥</span> Sponsor on GitHub</a></p>
+        <p class="hint">Not in a position to sponsor? A star on <a href="https://github.com/silicondaydream/panes">GitHub</a>, a bug report, or a docs fix helps too.</p>
+      </section>
     </main>
 
     <footer>
       <code>npm install panes-ui</code> · MIT ·
+      <a href="https://github.com/sponsors/silicondaydream">sponsor</a> ·
       <a href="https://github.com/silicondaydream/panes">source on GitHub</a> ·
       <a href="https://github.com/silicondaydream/panes/issues">report an issue</a> ·
       <a href="./llms.txt">llms.txt</a>
@@ -937,6 +960,48 @@ p.open();</pre>
         const { Pane, manager } = Panes;
 
         if (Panes.version) document.getElementById("ver").textContent = "v" + Panes.version;
+
+        // ---- nav: highlight the section in view ----------------------------
+        const navLinks = Array.prototype.slice.call(document.querySelectorAll('nav.top ul a[href^="#"]'));
+        const spied = navLinks
+          .map(function (a) { return document.getElementById(a.getAttribute("href").slice(1)); })
+          .filter(Boolean);
+        let activeId = "";
+        function setActive(id) {
+          if (id === activeId) return;
+          activeId = id;
+          if (!id) document.querySelector("nav.top .inner").scrollLeft = 0;
+          navLinks.forEach(function (a) {
+            const on = a.getAttribute("href") === "#" + id;
+            a.classList.toggle("active", on);
+            if (on) {
+              a.setAttribute("aria-current", "location");
+              // Keep the active link visible when the nav scrolls sideways on phones.
+              const nav = a.closest(".inner"), ar = a.getBoundingClientRect(), nr = nav.getBoundingClientRect();
+              if (ar.left < nr.left || ar.right > nr.right) nav.scrollLeft += ar.left - nr.left - 16;
+            } else {
+              a.removeAttribute("aria-current");
+            }
+          });
+        }
+        let spyQueued = false;
+        function spy() {
+          spyQueued = false;
+          // The current section is the last one whose top has passed just below the sticky nav.
+          const line = document.querySelector("nav.top").offsetHeight + 24;
+          let id = "";
+          spied.forEach(function (sec) { if (sec.getBoundingClientRect().top <= line) id = sec.id; });
+          // At the very bottom, the last section wins even if it's too short to reach the line.
+          if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) {
+            id = spied[spied.length - 1].id;
+          }
+          setActive(id);
+        }
+        window.addEventListener("scroll", function () {
+          if (!spyQueued) { spyQueued = true; requestAnimationFrame(spy); }
+        }, { passive: true });
+        window.addEventListener("resize", spy);
+        spy();
 
         // ---- copy buttons ------------------------------------------------
         function copyText(text, btn) {
